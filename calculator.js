@@ -2,19 +2,6 @@ let total = 0;
 let strbuffer = "0";
 let operator = null;
 
-function setListeners() {
-    let listeners = document.querySelectorAll(".buttons");
-    onclick = function(event) {
-        buttonClicked(event.target.innerText);
-    }
-    for (item of listeners) {
-        item.addEventListener("click", onclick);
-        console.log(item);
-    }
-}
-
-setListeners();
-
 function calculations() {
     const intBuffer = parseInt(strbuffer);
     if (operator === "+") {
@@ -29,15 +16,15 @@ function calculations() {
 }
 
 function makesNumber(value) {
-    console.log(strbuffer + "init");
+    // console.log(strbuffer + " init");
     if (strbuffer === "0") {
         strbuffer = value;
-        // console.log(strbuffer + "condition 0");
+        // console.log(strbuffer + " condition 0");
     } else {
         strbuffer += value;
-        // console.log(strbuffer + "condition not 0");
+        // console.log(strbuffer + " condition not 0");
     }
-    // console.log(strbuffer + "end res");
+    // console.log(strbuffer + " end res");
 }
 
 function makesSymbol(symbol) {
@@ -45,7 +32,11 @@ function makesSymbol(symbol) {
         total = 0;
         strbuffer = 0;
     } else if (symbol == "←") {
-        strbuffer = strbuffer.substring(0, strbuffer.length - 1); //May have to check if buffer length is 1
+        if (strbuffer.length == 1) {
+            strbuffer = "0";
+        } else {
+            strbuffer = strbuffer.substring(0, strbuffer.length - 1); //FIXED shouldn't be able to delete when display is just "0"
+        }
     } else if (symbol == "=") {
         calculations();
         strbuffer = total;
@@ -63,7 +54,22 @@ function makesSymbol(symbol) {
     }
 }
 
+function setListeners() {
+    let listeners = document.querySelectorAll(".buttons");
+    // onclick = function(event) {
+    //     buttonClicked(event.target.innerText);
+    // }
+    for (item of listeners) {
+        item.addEventListener("click", function(event) { //Anonymous function
+            buttonClicked(event.target.innerText);
+        })
+    }
+}
+
+setListeners();
+
 function buttonClicked(valueClicked) {
+    console.log(valueClicked);
     if (isNaN(parseInt(valueClicked))) {
         makesSymbol(valueClicked);
     } else {
